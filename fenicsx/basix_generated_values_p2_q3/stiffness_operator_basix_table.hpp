@@ -196,12 +196,12 @@ namespace {
         double w0_d001 = 0.0;
         for (int ic = 0; ic < 27; ++ic)
         {
-            w0_d100 += w[ic] * FE15_C0_D100_Qbe8[0][0][iq][ic];
-            w0_d010 += w[ic] * FE15_C0_D010_Qbe8[0][0][iq][ic];
-            w0_d001 += w[ic] * FE15_C0_D001_Qbe8[0][0][iq][ic];
-            // w0_d100 += w[ic] * phi(0, iq, ic);
-            // w0_d010 += w[ic] * phi(1, iq, ic);
-            // w0_d001 += w[ic] * phi(2, iq, ic);
+            // w0_d100 += w[ic] * FE15_C0_D100_Qbe8[0][0][iq][ic];
+            // w0_d010 += w[ic] * FE15_C0_D010_Qbe8[0][0][iq][ic];
+            // w0_d001 += w[ic] * FE15_C0_D001_Qbe8[0][0][iq][ic];
+            w0_d100 += w[ic] * phi(0, iq, ic);
+            w0_d010 += w[ic] * phi(1, iq, ic);
+            w0_d001 += w[ic] * phi(2, iq, ic);
         }
         double sv_be8[77];
         sv_be8[0] = J_c4 * J_c8;
@@ -285,8 +285,8 @@ namespace {
         const double fw1 = sv_be8[75] * weights_be8[iq];
         const double fw2 = sv_be8[76] * weights_be8[iq];
         for (int i = 0; i < 27; ++i)
-            // A[i] += fw0 * phi(0, iq, i) + fw1 * phi(1, iq, i) + fw2 * phi(2, iq, i);
-            A[i] += fw0 * FE15_C0_D100_Qbe8[0][0][iq][i] + fw1 * FE15_C0_D010_Qbe8[0][0][iq][i] + fw2 * FE15_C0_D001_Qbe8[0][0][iq][i];
+            A[i] += fw0 * phi(0, iq, i) + fw1 * phi(1, iq, i) + fw2 * phi(2, iq, i);
+            // A[i] += fw0 * FE15_C0_D100_Qbe8[0][0][iq][i] + fw1 * FE15_C0_D010_Qbe8[0][0][iq][i] + fw2 * FE15_C0_D001_Qbe8[0][0][iq][i];
 }
 }
 }

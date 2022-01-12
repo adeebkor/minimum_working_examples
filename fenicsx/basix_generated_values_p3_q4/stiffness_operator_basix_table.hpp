@@ -417,13 +417,13 @@ namespace {
         double w0_d001 = 0.0;
         for (int ic = 0; ic < 64; ++ic)
         {
-            // w0_d100 += w[ic] * phi(0, iq, ic);
-            // w0_d010 += w[ic] * phi(1, iq, ic);
-            // w0_d001 += w[ic] * phi(2, iq, ic);
+            w0_d100 += w[ic] * phi(0, iq, ic);
+            w0_d010 += w[ic] * phi(1, iq, ic);
+            w0_d001 += w[ic] * phi(2, iq, ic);
 
-            w0_d100 += w[ic] * FE15_C0_D100_Qad6[0][0][iq][ic];
-            w0_d010 += w[ic] * FE15_C0_D010_Qad6[0][0][iq][ic];
-            w0_d001 += w[ic] * FE15_C0_D001_Qad6[0][0][iq][ic];
+            // w0_d100 += w[ic] * FE15_C0_D100_Qad6[0][0][iq][ic];
+            // w0_d010 += w[ic] * FE15_C0_D010_Qad6[0][0][iq][ic];
+            // w0_d001 += w[ic] * FE15_C0_D001_Qad6[0][0][iq][ic];
 
             // compare table between ffcx generated and directly from basix
             // if (!xt::isclose(FE15_C0_D100_Qad6[0][0][iq][ic], phi(0, iq, ic))()){
@@ -521,8 +521,8 @@ namespace {
         const double fw1 = sv_ad6[78] * weights_ad6[iq];
         const double fw2 = sv_ad6[79] * weights_ad6[iq];
         for (int i = 0; i < 64; ++i)
-            A[i] += fw0 * FE15_C0_D100_Qad6[0][0][iq][i] + fw1 * FE15_C0_D010_Qad6[0][0][iq][i] + fw2 * FE15_C0_D001_Qad6[0][0][iq][i];
-            // A[i] += fw0 * phi(0, iq, i) + fw1 * phi(1, iq, i) + fw2 * phi(2, iq, i);
+            // A[i] += fw0 * FE15_C0_D100_Qad6[0][0][iq][i] + fw1 * FE15_C0_D010_Qad6[0][0][iq][i] + fw2 * FE15_C0_D001_Qad6[0][0][iq][i];
+            A[i] += fw0 * phi(0, iq, i) + fw1 * phi(1, iq, i) + fw2 * phi(2, iq, i);
     }
 }
 }
