@@ -26,8 +26,17 @@ int main(int argc, char* argv[]){
 
 	// Create stiffness operator
 	std::shared_ptr<fem::Function<double>> u = std::make_shared<fem::Function<double>>(V);
-	xtl::span<double> _u = u->x()->mutable_array();
-	std::fill(_u.begin(), _u.end(), 1.0e10);
+	// xtl::span<double> _u = u->x()->mutable_array();
+	// std::fill(_u.begin(), _u.end(), 100);
+
+    u->interpolate(
+        [](auto& x) -> xt::xarray<PetscScalar>
+        {
+          auto dx = xt::square(xt::row(x, 0) - 0.5)
+                    + xt::square(xt::row(x, 1) - 0.5);
+          return 10e10 * xt::exp(-(dx) / 0.02);
+        });
+
 
 	std::shared_ptr<StiffnessOperatorFFCX<double>> stiffness_operator_ffcx = std::make_shared<StiffnessOperatorFFCX<double>>(V);
 	std::shared_ptr<la::Vector<double>> s_ffcx = std::make_shared<la::Vector<double>>(index_map, bs);
@@ -35,10 +44,6 @@ int main(int argc, char* argv[]){
 	std::fill(_s_ffcx.begin(), _s_ffcx.end(), 0.0);
 	stiffness_operator_ffcx->operator()(*u->x(), *s_ffcx);
 
-	for (int i = 0; i < 10; ++i){
-      std::cout << s_ffcx->mutable_array()[i] << std::endl;
-    }
-	std::cout << std::endl;
 
 	std::shared_ptr<StiffnessOperatorBASIX<double>> stiffness_operator_basix = std::make_shared<StiffnessOperatorBASIX<double>>(V);
 	std::shared_ptr<la::Vector<double>> s_basix = std::make_shared<la::Vector<double>>(index_map, bs);
@@ -47,8 +52,11 @@ int main(int argc, char* argv[]){
 	stiffness_operator_basix->operator()(*u->x(), *s_basix);
 
 	for (int i = 0; i < 10; ++i){
-      std::cout << s_basix->mutable_array()[i] << std::endl;
     }
-	std::getchar();
+	std::cout << std::endl;
+	for (int i = 0; i < 10; ++i){
+      std::cout << s_basix->mutable_array()[i] << " " << s_ffcx->mutable_array()[i] << " " <<
+        (s_basix->mutable_array()[i] - s_ffcx->mutable_array()[i]) / s_ffcx->mutable_array()[i] << std::endl;
+    }
   }
 }
