@@ -3,3 +3,5 @@ fenicsx/dolfinx
 fenicsx/ffcx
 fenicsx/ufl
 *build/
+*.c
+*.h
